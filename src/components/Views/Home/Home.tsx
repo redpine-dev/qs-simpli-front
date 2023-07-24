@@ -11,6 +11,7 @@ const Home: React.FC = () => {
         e.target.value = "";
       })
       .catch((err: any) => {
+        alert(err);
         e.target.value = "";
       });
   }
