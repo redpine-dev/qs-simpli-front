@@ -72,12 +72,14 @@ export async function readExcel(file) {
                   reject("Estado no encontrado en la fila " + rowNumber);
                   break;
               }
-              if (row.getCell(10).value === 12) {
+              if (row.getCell(10).value === "12") {
                 rowToArray[headers[2]] = row.getCell(84).value;
               } else {
                 rowToArray[headers[2]] = row.getCell(70).value;
               }
-              rowsToArray.push(rowToArray);
+              if (rowToArray[headers[1]] !== "pending") {
+                rowsToArray.push(rowToArray);
+              }
             }
           });
         })

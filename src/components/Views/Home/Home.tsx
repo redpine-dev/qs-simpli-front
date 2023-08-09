@@ -1,17 +1,30 @@
-import { Button } from "@mui/material";
-import { ChangeEvent } from "react";
+import { Alert, Button } from "@mui/material";
+import { ChangeEvent, useState } from "react";
 import { readExcel } from "../../../utils/readExcel";
+import { sendExcel } from "../../../services/excelService";
 
 const Home: React.FC = () => {
+  const [errorAlert, setErrorAlert] = useState(false);
+  const [successAlert, setSuccessAlert] = useState(false);
+
   function handleUpload(e: ChangeEvent<HTMLInputElement>): void {
     const file = e.target.files![0];
     readExcel(file)
       .then((rows: any[]) => {
-        console.log(JSON.stringify(rows));
+        sendExcel(rows)
+          .then((res) => {
+            if (res) setSuccessAlert(true);
+            else setErrorAlert(true);
+          })
+          .catch((err: any) => {
+            setErrorAlert(true);
+          });
+
         e.target.value = "";
       })
       .catch((err: any) => {
         alert(err);
+
         e.target.value = "";
       });
   }
@@ -43,6 +56,28 @@ const Home: React.FC = () => {
           </Button>
         </label>
       </div>
+      {successAlert && (
+        <Alert
+          severity="success"
+          sx={{ width: "100%", marginTop: "20px", marginBottom: "20px" }}
+          onClose={() => {
+            setSuccessAlert(false);
+          }}
+        >
+          Excel Cargado exitosamente
+        </Alert>
+      )}
+      {errorAlert && (
+        <Alert
+          severity="error"
+          sx={{ width: "100%", marginTop: "20px", marginBottom: "20px" }}
+          onClose={() => {
+            setErrorAlert(false);
+          }}
+        >
+          Hubo un error
+        </Alert>
+      )}
     </div>
   );
 };
