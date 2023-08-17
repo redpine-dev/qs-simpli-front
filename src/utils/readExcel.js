@@ -22,7 +22,7 @@ export async function readExcel(file) {
               let rowToArray = {};
               rowToArray[headers[0]] = row.getCell(1).value;
 
-              switch (row.getCell(10).value) {
+              switch (row.getCell(9).value) {
                 case "1":
                   rowToArray[headers[1]] = "pending";
                   break;
@@ -75,7 +75,7 @@ export async function readExcel(file) {
               if (row.getCell(10).value === "12") {
                 rowToArray[headers[2]] = row.getCell(84).value;
               } else {
-                rowToArray[headers[2]] = row.getCell(70).value;
+                rowToArray[headers[2]] = row.getCell(53).value;
               }
               if (rowToArray[headers[1]] !== "pending") {
                 rowsToArray.push(rowToArray);
