@@ -1,4 +1,5 @@
 import Excel from "exceljs";
+const { DateTime } = require("luxon");
 
 export async function readExcel(file) {
   const reader = new FileReader();
@@ -8,7 +9,7 @@ export async function readExcel(file) {
     reader.onload = () => {
       const buffer = reader.result;
       let rowsToArray = [];
-      let headers = ["reference", "status", "comments"];
+      let headers = ["reference", "status", "comments", "date"];
       wb.xlsx
         .load(buffer)
         .then((workbook) => {
@@ -77,6 +78,31 @@ export async function readExcel(file) {
               } else {
                 rowToArray[headers[2]] = row.getCell(53).value;
               }
+
+              var fecha_str = row.getCell(51).value;
+              var hora_str = row.getCell(52).value;
+
+              const fecha_parts = fecha_str.split("-");
+              const hora_parts = hora_str.split(":");
+              // Parsear los strings en objetos de fecha y hora
+              const fechaUTC = new Date(
+                Date.UTC(
+                  parseInt(fecha_parts[0]),
+                  parseInt(fecha_parts[1]) - 1,
+                  parseInt(fecha_parts[2]),
+                  parseInt(hora_parts[0]),
+                  parseInt(hora_parts[1]),
+                  parseInt(hora_parts[2])
+                )
+              );
+
+              // Ajustar la diferencia horaria para horario chileno (considerando horario de verano)
+              const offsetChile = 240; // UTC-4, considerando horario de verano
+              const fechaChile = new Date(
+                fechaUTC.getTime() + offsetChile * 60000
+              );
+              console.log(fechaChile);
+              rowToArray[headers[3]] = fechaChile;
               if (rowToArray[headers[1]] !== "pending") {
                 rowsToArray.push(rowToArray);
               }
