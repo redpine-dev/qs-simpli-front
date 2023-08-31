@@ -11,6 +11,7 @@ const Home: React.FC = () => {
     const file = e.target.files![0];
     readExcel(file)
       .then((rows: any[]) => {
+        console.log(rows);
         sendExcel(rows)
           .then((res) => {
             if (res) setSuccessAlert(true);

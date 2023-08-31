@@ -1,5 +1,5 @@
 import Excel from "exceljs";
-const { DateTime } = require("luxon");
+import { convertDateToString } from "./convertDateToString";
 
 export async function readExcel(file) {
   const reader = new FileReader();
@@ -79,17 +79,18 @@ export async function readExcel(file) {
                 rowToArray[headers[2]] = row.getCell(53).value;
               }
 
-              var fecha_str = row.getCell(51).value;
-              var hora_str = row.getCell(52).value;
+              var fecha_str = convertDateToString(row.getCell(51).value);
+              var hora_str = row.getCell(52).text;
 
               const fecha_parts = fecha_str.split("-");
+
               const hora_parts = hora_str.split(":");
               // Parsear los strings en objetos de fecha y hora
               const fechaUTC = new Date(
                 Date.UTC(
-                  parseInt(fecha_parts[0]),
-                  parseInt(fecha_parts[1]) - 1,
                   parseInt(fecha_parts[2]),
+                  parseInt(fecha_parts[1]) - 1,
+                  parseInt(fecha_parts[0]),
                   parseInt(hora_parts[0]),
                   parseInt(hora_parts[1]),
                   parseInt(hora_parts[2])
