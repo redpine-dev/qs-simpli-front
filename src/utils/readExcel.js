@@ -98,7 +98,7 @@ export async function readExcel(file) {
               );
 
               // Ajustar la diferencia horaria para horario chileno (considerando horario de verano)
-              const offsetChile = 240; // UTC-4, considerando horario de verano
+              const offsetChile = 180; // UTC-3, considerando horario de verano
               const fechaChile = new Date(
                 fechaUTC.getTime() + offsetChile * 60000
               );
